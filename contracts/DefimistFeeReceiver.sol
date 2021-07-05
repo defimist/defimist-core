@@ -48,8 +48,13 @@ contract DefimistFeeReceiver {
     
     // Helper function to know if an address is a contract, extcodesize returns the size of the code of a smart
     //  contract in a specific address
-    function isContract(address addr) internal returns (bool) {
-        uint size;
+    function isContract(address addr) internal view returns (bool) {
+        // This method relies on extcodesize, which returns 0 for contracts in
+        // construction, since the code is only stored at the end of the
+        // constructor execution.
+
+        uint256 size;
+        // solhint-disable-next-line no-inline-assembly
         assembly { size := extcodesize(addr) }
         return size > 0;
     }
